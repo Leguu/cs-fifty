@@ -14,7 +14,21 @@ function Ball:reset(x, y)
   }
 end
 
+function Ball:handleCollision()
+  self.velocity = {x = -self.velocity.x, y = -self.velocity.y}
+end
+
+function Ball:isColliding(paddle)
+  return
+      (paddle.x < self.x + Ball.SIZE and self.x < paddle.x + Paddle.WIDTH) and
+          (paddle.y < self.y + Ball.SIZE and self.y < paddle.y + Paddle.HEIGHT)
+end
+
 function Ball:update(dt)
+  if self.y < 0 or VIRTUAL_HEIGHT < self.y + Ball.SIZE then
+    self.velocity.y = -self.velocity.y
+  end
+
   self.x = self.x + self.velocity.x * dt
   self.y = self.y + self.velocity.y * dt
 end
