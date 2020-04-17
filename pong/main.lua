@@ -7,8 +7,8 @@ VIRTUAL_HEIGHT = 243
 Object = require 'utils/classic'
 push = require 'utils/push'
 
-Ball = require 'Ball'
-Paddle = require 'Paddle'
+Ball = require 'ball'
+Paddle = require 'paddle'
 
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
