@@ -4,8 +4,8 @@ WINDOW_HEIGHT = 720
 VIRTUAL_WIDTH = 432
 VIRTUAL_HEIGHT = 243
 
-Object = require 'classic'
-push = require 'push'
+Object = require 'utils/classic'
+push = require 'utils/push'
 
 Ball = require 'Ball'
 Paddle = require 'Paddle'
