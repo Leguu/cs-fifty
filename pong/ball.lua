@@ -8,14 +8,17 @@ function Ball:reset(x, y)
   self.x = x - Ball.SIZE / 2
   self.y = y - Ball.SIZE / 2
 
+  local verticality = math.random() < 0.5 and -1 or 1
+
   self.velocity = {
-    x = math.random(-50, 50),
+    x = verticality * (math.random() * 40 + 30),
     y = math.random() < 0.5 and -100 or 100,
   }
 end
 
 function Ball:handleCollision()
-  self.velocity = {x = -self.velocity.x, y = -self.velocity.y}
+  self.velocity.x = -self.velocity.x
+  self.x = self.x + self.velocity.x * 0.05
 end
 
 function Ball:isColliding(paddle)
