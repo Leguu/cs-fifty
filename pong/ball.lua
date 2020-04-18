@@ -16,8 +16,8 @@ end
 
 function Ball:handleCollision()
   self.velocity.x = -self.velocity.x * 1.03
-  self.velocity.y = (self.velocity.y / math.abs(self.velocity.y)) *
-                        math.random(10, 150)
+  self.velocity.y = self.velocity.y > 0 and math.random(10, 150) or
+                        -math.random(10, 150)
 
   self.x = self.x + self.velocity.x * 0.05
 end

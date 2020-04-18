@@ -1,3 +1,5 @@
+FPS_ENABLED = false
+
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
@@ -28,23 +30,21 @@ function love.load()
 end
 
 function love.keypressed(key)
-  if key == 'q' then love.event.quit() end
+  if key == 'q' or key == 'escape' then love.event.quit() end
 
-  if key == 'space' and state == 'off' then
-    state = 'serve'
-  elseif key == 'space' and state == 'serve' then
-    if (player.score + enemy.score) % 2 == 0 then
-      ball.velocity.x = math.abs(ball.velocity.x)
-    else
-      ball.velocity.x = -math.abs(ball.velocity.x)
-    end
+  if key == 'space' and state == 'serve' then
+    ball.velocity.x = (player.score + enemy.score) % 2 == 0 and
+                          math.abs(ball.velocity.x) or
+                          -math.abs(ball.velocity.x)
     ball.velocity.y = math.random(-20, 20)
     state = 'on'
-  elseif key == 'space' and state == 'on' then
+  elseif key == 'space' and (state == 'on' or state == 'win') then
     player.score = 0
     enemy.score = 0
     state = 'serve'
     reset()
+    player:reset(10, 20)
+    enemy:reset(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 20 - Paddle.HEIGHT)
   end
 end
 
@@ -70,12 +70,13 @@ function love.update(dt)
     enemy.score = enemy.score + 1
     state = 'serve'
     reset()
-  end
-  if ball.x > VIRTUAL_WIDTH then
+  elseif ball.x > VIRTUAL_WIDTH then
     player.score = player.score + 1
     state = 'serve'
     reset()
   end
+
+  if player.score > 9 or enemy.score > 9 then state = 'win' end
 end
 
 function love.draw()
@@ -83,18 +84,33 @@ function love.draw()
   love.graphics.clear(40 / 255, 45 / 255, 52 / 255)
 
   if state == 'serve' then
-    local servingPlayer = (player.score + enemy.score) % 2 == 0 and 'right' or
-                              'left'
+    local servingPlayer = (player.score + enemy.score) % 2 == 0 and 'left' or
+                              'right'
     love.graphics.printf(
         'Player ' .. servingPlayer .. ' serves', 0, 20, VIRTUAL_WIDTH, 'center'
     )
     love.graphics.printf('Press SPACE to serve', 0, 30, VIRTUAL_WIDTH, 'center')
   end
-  love.graphics.printf(love.timer.getFPS(), 20, 5, VIRTUAL_WIDTH, 'left')
+
+  if state == 'win' then
+    local winningPlayer = player.score > enemy.score and 'left' or 'right'
+
+    love.graphics.printf(
+        'Player ' .. winningPlayer .. ' has won!', 0, VIRTUAL_HEIGHT / 2,
+        VIRTUAL_WIDTH, 'center'
+    )
+
+    goto cleanup
+  end
+
+  if FPS_ENABLED then
+    love.graphics.printf(love.timer.getFPS(), 20, 5, VIRTUAL_WIDTH, 'left')
+  end
 
   player:draw()
   enemy:draw()
   ball:draw()
 
+  ::cleanup::
   push:finish()
 end

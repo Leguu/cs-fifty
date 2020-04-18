@@ -4,9 +4,13 @@ Paddle.WIDTH = 5
 Paddle.HEIGHT = 20
 
 function Paddle:new(x, y)
+  self:reset(x, y)
+  self.score = 0
+end
+
+function Paddle:reset(x, y)
   self.x = x
   self.y = y
-  self.score = 0
 end
 
 function Paddle:ascend(dt) self.y = math.max(0, self.y - Paddle.SPEED * dt) end
