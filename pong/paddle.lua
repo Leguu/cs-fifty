@@ -6,6 +6,7 @@ Paddle.HEIGHT = 20
 function Paddle:new(x, y)
   self.x = x
   self.y = y
+  self.score = 0
 end
 
 function Paddle:ascend(dt) self.y = math.max(0, self.y - Paddle.SPEED * dt) end
@@ -16,6 +17,9 @@ end
 
 function Paddle:draw()
   love.graphics.rectangle('fill', self.x, self.y, Paddle.WIDTH, Paddle.HEIGHT)
+  love.graphics.printf(
+      self.score, self.x - 10, self.y - 15, Paddle.WIDTH + 20, 'center'
+  )
 end
 
 return Paddle
