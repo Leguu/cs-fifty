@@ -54,8 +54,13 @@ function love.update(dt)
   if love.keyboard.isDown('w') then player:ascend(dt) end
   if love.keyboard.isDown('s') then player:descend(dt) end
 
-  if love.keyboard.isDown('up') then enemy:ascend(dt) end
-  if love.keyboard.isDown('down') then enemy:descend(dt) end
+  -- if love.keyboard.isDown('up') then enemy:ascend(dt) end
+  -- if love.keyboard.isDown('down') then enemy:descend(dt) end
+  if ball.y < enemy.y then
+    enemy:ascend(dt / 2)
+  elseif ball.y > enemy.y + Paddle.HEIGHT then
+    enemy:descend(dt / 2)
+  end
 
   -- Only move the ball while the game is on
   if state ~= 'on' then return end
@@ -63,7 +68,7 @@ function love.update(dt)
   ball:update(dt)
 
   if ball:isColliding(player) or ball:isColliding(enemy) then
-    ball:handleCollision()
+    ball:handleCollision(dt, ball:isColliding(player) and player or enemy)
   end
 
   if ball.x + Ball.SIZE < 0 then

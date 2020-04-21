@@ -14,12 +14,20 @@ function Ball:reset(x, y)
   }
 end
 
-function Ball:handleCollision()
+function Ball:handleCollision(dt, paddle)
   self.velocity.x = -self.velocity.x * 1.03
+
+  -- Set the velocity going in the same direction, but random
   self.velocity.y = self.velocity.y > 0 and math.random(10, 150) or
                         -math.random(10, 150)
+  -- If the ball hit the paddle in the edges, make it faster
+  self.velocity.y = self.velocity.y *
+                        math.abs(
+                            ((paddle.y + Paddle.HEIGHT / 2) -
+                                (ball.y + Ball.SIZE / 2))
+                        ) / 10
 
-  self.x = self.x + self.velocity.x * 0.05
+  self.x = self.x + self.velocity.x * dt
 end
 
 function Ball:isColliding(paddle)
