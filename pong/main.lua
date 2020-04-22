@@ -18,6 +18,12 @@ function love.load()
 
   font = love.graphics.setNewFont('font.ttf', 8)
 
+  sounds = {
+    ['paddle_hit'] = love.audio.newSource('sounds/paddle_hit.wav', 'static'),
+    ['score'] = love.audio.newSource('sounds/score.wav', 'static'),
+    ['wall_hit'] = love.audio.newSource('sounds/wall_hit.wav', 'static'),
+  }
+
   math.randomseed(os.time())
 
   player = Paddle(10, 20)
@@ -28,6 +34,8 @@ function love.load()
 
   state = 'serve'
 end
+
+function love.resize(w, h) push:resize(w, h) end
 
 function love.keypressed(key)
   if key == 'q' or key == 'escape' then love.event.quit() end
@@ -69,19 +77,22 @@ function love.update(dt)
 
   if ball:isColliding(player) or ball:isColliding(enemy) then
     ball:handleCollision(dt, ball:isColliding(player) and player or enemy)
+    love.audio.play(sounds.paddle_hit)
   end
 
   if ball.x + Ball.SIZE < 0 then
     enemy.score = enemy.score + 1
     state = 'serve'
     reset()
+    love.audio.play(sounds.score)
   elseif ball.x > VIRTUAL_WIDTH then
     player.score = player.score + 1
     state = 'serve'
     reset()
+    love.audio.play(sounds.score)
   end
 
-  if player.score > 9 or enemy.score > 9 then state = 'win' end
+  if player.score > 4 or enemy.score > 4 then state = 'win' end
 end
 
 function love.draw()

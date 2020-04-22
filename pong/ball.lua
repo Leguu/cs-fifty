@@ -39,6 +39,7 @@ end
 function Ball:update(dt)
   if self.y < 0 or VIRTUAL_HEIGHT < self.y + Ball.SIZE then
     self.velocity.y = -self.velocity.y
+    love.audio.play(sounds.wall_hit)
   end
 
   self.x = self.x + self.velocity.x * dt
