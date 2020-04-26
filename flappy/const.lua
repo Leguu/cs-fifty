@@ -14,6 +14,8 @@ foreground = {
   LOOPING_POINT = -VIRTUAL_WIDTH,
 }
 
+DRAG = {HORIZONTAL = 0.99, VERTICAL = 0.97}
+
 function background:draw(x)
   love.graphics.draw(background.image, x % background.LOOPING_POINT)
 end
