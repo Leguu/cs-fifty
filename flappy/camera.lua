@@ -1,8 +1,8 @@
 local Camera = Object:extend()
 
 function Camera:new(x, y)
-  self.x = x
-  self.y = y
+  self.x = x or 0
+  self.y = y or 0
 end
 
 function Camera:follow(entity, distance)

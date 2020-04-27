@@ -3,6 +3,7 @@ local Bird = Object:extend()
 Bird.IMAGE = love.graphics.newImage('assets/bird.png')
 Bird.WIDTH = Bird.IMAGE:getWidth()
 Bird.HEIGHT = Bird.IMAGE:getHeight()
+Bird.TERMINAL = {x = 5, y = 7, yupper = -6}
 
 function Bird:new()
   self.pos = {x = 50, y = VIRTUAL_HEIGHT / 2 - (Bird.HEIGHT / 2)}
@@ -17,9 +18,13 @@ function Bird:update(dt)
 
   dy = dy + GRAVITY * dt
 
+  if dx > Bird.TERMINAL.x then dx = Bird.TERMINAL.x end
+  if dy > Bird.TERMINAL.y then dy = Bird.TERMINAL.y end
+  if dy < Bird.TERMINAL.yupper then dy = Bird.TERMINAL.yupper end
+
   if love.keyboard.wasPressed('space') then
-    dy = dy - 700 * dt
-    dx = dx + 50 * dt
+    dy = dy - 400 * dt
+    dx = dx + 15 * dt
   end
 
   -- Set the previous value to be the current value

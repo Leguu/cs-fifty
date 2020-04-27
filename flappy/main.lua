@@ -3,12 +3,15 @@ push = require('utils/push')
 
 require('const')
 
-local Pipe = require('pipe')
+local Bird = require('bird')
+local bird = Bird()
 
-local pipe = Pipe()
+local Camera = require('camera')
+local camera = Camera()
 
-local bird = require('bird')()
-local camera = require('camera')(0, 0)
+require('pipe')
+local pipes = {PipePair(300)}
+local nextPipe = pipes[1].x + 200
 
 function love.load()
   -- Library setup
@@ -40,6 +43,16 @@ function love.update(dt)
   bird:update(dt)
   camera:follow(bird, 150)
 
+  if pipes[1].x < VIRTUAL_WIDTH then
+    table.insert(pipes, PipePair(nextPipe))
+    nextPipe = nextPipe + PipePair.DISTANCE_MIN +
+                   math.random(PipePair.DISTANCE_VAR)
+  end
+
+  for i, pipe in pairs(pipes) do
+    if pipe.x + Pipe.WIDTH < camera.x then table.remove(pipes, i) end
+  end
+
   love.keyboard.keysPressed = {}
 end
 
@@ -47,8 +60,10 @@ function love.draw()
   push:start()
 
   camera:draw(background, 0.35)
-  camera:draw(foreground, 0.9)
-  camera:draw(pipe)
+
+  for i, pipe in pairs(pipes) do camera:draw(pipe) end
+
+  camera:draw(foreground)
 
   camera:draw(bird)
 
