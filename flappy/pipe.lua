@@ -1,10 +1,9 @@
 -- 
 -- PIPE
 --
-Pipe = Object:extend()
+local Pipe = Object:extend()
 
 Pipe.IMAGE = love.graphics.newImage('assets/pipe.png')
-Pipe.WIDTH = Pipe.IMAGE:getWidth()
 
 function Pipe:new(y)
   self.y = y
@@ -17,7 +16,9 @@ end
 --
 -- PIPE PAIRS
 --
-PipePair = Object:extend()
+local PipePair = Object:extend()
+
+PipePair.WIDTH = Pipe.IMAGE:getWidth()
 
 PipePair.DISTANCE_MIN = 200
 PipePair.DISTANCE_VAR = 50
@@ -40,3 +41,5 @@ function PipePair:draw(x)
   self.upper:draw(x, true)
   self.lower:draw(x, false)
 end
+
+return PipePair

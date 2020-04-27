@@ -9,7 +9,7 @@ local bird = Bird()
 local Camera = require('camera')
 local camera = Camera()
 
-require('pipe')
+local PipePair = require('pipe')
 local pipes = {PipePair(300)}
 local nextPipe = pipes[1].x + 200
 
@@ -50,7 +50,7 @@ function love.update(dt)
   end
 
   for i, pipe in pairs(pipes) do
-    if pipe.x + Pipe.WIDTH < camera.x then table.remove(pipes, i) end
+    if pipe.x + PipePair.WIDTH < camera.x then table.remove(pipes, i) end
   end
 
   love.keyboard.keysPressed = {}
